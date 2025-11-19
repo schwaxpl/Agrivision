@@ -1,0 +1,262 @@
+{
+  "metadata": {
+    "total_scenarios": 1,
+    "processing_date": "2025-11-18T17:24:13.480818",
+    "version": "1.0"
+  },
+  "scenarios": [
+    {
+      "scenario_title": "Formation sur la gestion des prairies",
+      "days": [
+        {
+          "day_number": 1,
+          "day_date": null,
+          "day_title": "Introduction et gestion des prairies",
+          "sequences": [
+            {
+              "sequence_number": 1,
+              "start_time": "09:00",
+              "end_time": "09:10",
+              "content": "Accueil des stagiaires et présentation du programme",
+              "pedagogical_methods": [
+                "Cours magistral"
+              ],
+              "evaluation_modalities": [
+                "QCM"
+              ],
+              "title": "Accueil et Présentation",
+              "objectives": [
+                "Accueillir les stagiaires",
+                "Présenter le programme"
+              ],
+              "resources_needed": []
+            },
+            {
+              "sequence_number": 2,
+              "start_time": "09:10",
+              "end_time": "09:25",
+              "content": "La démarche de transition et les intérêts des prairies",
+              "pedagogical_methods": [
+                "Cours magistral"
+              ],
+              "evaluation_modalities": [
+                "QCM"
+              ],
+              "title": "Démarche de Transition",
+              "objectives": [
+                "Identifier les intérêts des prairies dans le système d'exploitation"
+              ],
+              "resources_needed": []
+            },
+            {
+              "sequence_number": 3,
+              "start_time": "09:25",
+              "end_time": "10:55",
+              "content": "Calcul du rendement en herbe et pistes d'amélioration",
+              "pedagogical_methods": [
+                "TP"
+              ],
+              "evaluation_modalities": [
+                "Rapport"
+              ],
+              "title": "Calcul du Rendement",
+              "objectives": [
+                "Savoir calculer le rendement en herbe valorisé sur son exploitation",
+                "Lister des pistes d'amélioration du rendement valorisé"
+              ],
+              "resources_needed": [
+                "Calculatrices",
+                "Tableaux de rendement"
+              ]
+            },
+            {
+              "sequence_number": 4,
+              "start_time": "10:55",
+              "end_time": "13:40",
+              "content": "Choix d'une composition prairiale adaptée",
+              "pedagogical_methods": [
+                "Travail de groupe"
+              ],
+              "evaluation_modalities": [
+                "Présentation orale"
+              ],
+              "title": "Composition Prairiale",
+              "objectives": [
+                "Savoir choisir une composition prairiale adaptée à la situation des parcelles"
+              ],
+              "resources_needed": [
+                "Exemples de compositions prairiales"
+              ]
+            },
+            {
+              "sequence_number": 5,
+              "start_time": "13:40",
+              "end_time": "15:10",
+              "content": "Étapes clés d'une saison de pâturage",
+              "pedagogical_methods": [
+                "Cours magistral"
+              ],
+              "evaluation_modalities": [
+                "QCM"
+              ],
+              "title": "Saison de Pâturage",
+              "objectives": [
+                "Connaître les étapes clés d'une saison de pâturage et se donner des repères de conduite des prairies"
+              ],
+              "resources_needed": []
+            }
+          ],
+          "daily_objectives": [
+            "Accueillir les stagiaires et présenter le programme",
+            "Comprendre la démarche de transition et les intérêts des prairies",
+            "Apprendre à calculer le rendement en herbe et identifier des pistes d'amélioration",
+            "Choisir une composition prairiale adaptée",
+            "Connaître les étapes clés d'une saison de pâturage"
+          ]
+        },
+        {
+          "day_number": 2,
+          "day_date": null,
+          "day_title": "Analyse et accompagnement",
+          "sequences": [
+            {
+              "sequence_number": 1,
+              "start_time": "09:00",
+              "end_time": "09:30",
+              "content": "Accueil des stagiaires",
+              "pedagogical_methods": [
+                "Cours magistral"
+              ],
+              "evaluation_modalities": [
+                "QCM"
+              ],
+              "title": "Accueil",
+              "objectives": [
+                "Accueillir les stagiaires"
+              ],
+              "resources_needed": []
+            },
+            {
+              "sequence_number": 2,
+              "start_time": "09:30",
+              "end_time": "12:00",
+              "content": "Identification des facteurs de vieillissement et de réussite des implantations",
+              "pedagogical_methods": [
+                "TP"
+              ],
+              "evaluation_modalities": [
+                "Rapport"
+              ],
+              "title": "Facteurs de Vieillissement",
+              "objectives": [
+                "Identifier les facteurs de vieillissement des prairies et les facteurs de réussite des implantations"
+              ],
+              "resources_needed": [
+                "Études de cas"
+              ]
+            },
+            {
+              "sequence_number": 3,
+              "start_time": "12:00",
+              "end_time": "14:00",
+              "content": "Raisonnement de la fertilisation N, P, K, chaulage",
+              "pedagogical_methods": [
+                "Cours magistral"
+              ],
+              "evaluation_modalities": [
+                "QCM"
+              ],
+              "title": "Fertilisation",
+              "objectives": [
+                "Savoir raisonner la fertilisation pour calculer les besoins de ses prairies"
+              ],
+              "resources_needed": []
+            },
+            {
+              "sequence_number": 4,
+              "start_time": "14:00",
+              "end_time": "14:45",
+              "content": "Affinage de la problématique et plan d'action",
+              "pedagogical_methods": [
+                "Travail de groupe"
+              ],
+              "evaluation_modalities": [
+                "Présentation orale"
+              ],
+              "title": "Plan d'Action",
+              "objectives": [
+                "Affiner sa problématique et compléter son plan d'action"
+              ],
+              "resources_needed": []
+            },
+            {
+              "sequence_number": 5,
+              "start_time": "14:45",
+              "end_time": "15:15",
+              "content": "Bilan de la formation",
+              "pedagogical_methods": [
+                "Discussion"
+              ],
+              "evaluation_modalities": [
+                "Feedback"
+              ],
+              "title": "Bilan",
+              "objectives": [
+                "Faire le bilan de la formation"
+              ],
+              "resources_needed": []
+            },
+            {
+              "sequence_number": 6,
+              "start_time": "15:15",
+              "end_time": "18:15",
+              "content": "Accompagnement individualisé",
+              "pedagogical_methods": [
+                "Accompagnement personnalisé"
+              ],
+              "evaluation_modalities": [
+                "Suivi individuel"
+              ],
+              "title": "Accompagnement",
+              "objectives": [
+                "Permettre au stagiaire d'acquérir les savoirs nécessaires à la résolution de sa problématique"
+              ],
+              "resources_needed": [
+                "Supports de réflexion"
+              ]
+            }
+          ],
+          "daily_objectives": [
+            "Accueillir les stagiaires",
+            "Identifier les facteurs de vieillissement des prairies",
+            "Raisonner la fertilisation",
+            "Affiner la problématique et le plan d'action",
+            "Faire le bilan de la formation"
+          ]
+        }
+      ],
+      "target_audience": "Agriculteurs et gestionnaires d'exploitation",
+      "global_objectives": [
+        "Comprendre les enjeux de la gestion des prairies",
+        "Savoir appliquer des techniques d'amélioration du rendement",
+        "Acquérir des compétences en fertilisation et en pâturage"
+      ],
+      "prerequisites": [
+        "Connaissances de base en agriculture",
+        "Expérience préalable dans la gestion des prairies"
+      ],
+      "global_resources": [
+        "Matériel de présentation",
+        "Supports de cours",
+        "Accès à des outils de calcul"
+      ],
+      "confidence_score": 0.9,
+      "statistics": {
+        "total_days": 2,
+        "total_sequences": 11,
+        "total_duration_minutes": 925,
+        "total_duration_hours": 15.42
+      }
+    }
+  ]
+}
