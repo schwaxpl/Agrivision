@@ -2,6 +2,6 @@
 Processeurs pour l'extraction d'informations structurées depuis les documents.
 """
 
-from .scientific_article_processor import ScientificArticleProcessor
+from .scientific_article_processor import PedagogicalScenarioProcessor
 
-__all__ = ["ScientificArticleProcessor"]
+__all__ = ["PedagogicalScenarioProcessor"]

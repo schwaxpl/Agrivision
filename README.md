@@ -54,8 +54,8 @@ poetry install
 # Copier le fichier d'exemple d'environnement
 cp .env.example .env
 
-# Éditer le fichier .env et ajouter votre clé API Mistral
-MISTRAL_API_KEY=your_mistral_api_key_here
+# Éditer le fichier .env et ajouter votre clé API OpenAI
+OPENAI_API_KEY=your_openai_api_key_here
 ```
 
 ## 📖 Utilisation
