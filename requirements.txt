@@ -15,11 +15,11 @@ unstructured[md]>=0.10.0
 python-magic-bin>=0.4.14  # Pour Windows
 
 # Interface en ligne de commande
-argparse
+#argparse -->inutile de le mettre dans requirements.txt car c’est une librairie standard Python (déjà incluse) 
 
 # Utilitaires
 python-dotenv>=1.0.0  # Pour charger les variables d'environnement
-pathlib2>=2.3.0  # Support amélioré des chemins (rétrocompatibilité)
+#pathlib2>=2.3.0  # Support amélioré des chemins (rétrocompatibilité)
 
 # Formats de sortie
 pandas>=1.5.0  # Pour l'export CSV avancé
@@ -35,3 +35,12 @@ pandas>=1.5.0  # Pour l'export CSV avancé
 # black>=23.0.0
 # flake8>=6.0.0
 # mypy>=1.0.0
+
+#Ajouter openai si tu utilises des embeddings ou des modèles OpenAI (optionnel).
+#Ajouter markdown si tu veux parser ou manipuler du Markdown en Python (optionnel).
+#Ajouter requests si tu fais des appels HTTP directs à l’API Mistral (optionnel)
+
+#optionnel
+#openai
+#markdown
+#requests
