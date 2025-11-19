@@ -211,3 +211,4 @@ output/
 input/
 data/
 *.tmp
+*.pdf
