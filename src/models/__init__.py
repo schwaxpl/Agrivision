@@ -1,7 +1,7 @@
 """
-Modèles Pydantic pour la représentation des articles scientifiques.
+Modèles Pydantic pour la représentation des scénarios pédagogiques.
 """
 
-from .scientific_article import ScientificArticle
+from .pedagogical_scenario import PedagogicalScenario
 
-__all__ = ["ScientificArticle"]
+__all__ = ["PedagogicalScenario"]

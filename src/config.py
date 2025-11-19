@@ -25,13 +25,14 @@ class Config:
     # ==========================================================================
     # API CONFIGURATION
     # ==========================================================================
-    MISTRAL_API_KEY: str = os.getenv("MISTRAL_API_KEY", "")
-    MISTRAL_API_BASE: str = os.getenv("MISTRAL_API_BASE", "https://api.mistral.ai/v1")
+    OPENAI_API_KEY: str = os.getenv("OPENAI_API_KEY", "")
+    OPENAI_API_BASE: str = os.getenv("OPENAI_API_BASE", "https://api.openai.com/v1")
+    OPENAI_ORGANIZATION: Optional[str] = os.getenv("OPENAI_ORGANIZATION")
     
     # ==========================================================================
     # MODÈLE CONFIGURATION
     # ==========================================================================
-    DEFAULT_MODEL: str = os.getenv("DEFAULT_MODEL", "mistral-large-latest")
+    DEFAULT_MODEL: str = os.getenv("DEFAULT_MODEL", "gpt-3.5-turbo")
     DEFAULT_TEMPERATURE: float = float(os.getenv("DEFAULT_TEMPERATURE", "0.1"))
     MAX_TOKENS: int = int(os.getenv("MAX_TOKENS", "4000"))
     
@@ -83,8 +84,8 @@ class Config:
         """
         errors = []
         
-        if not cls.MISTRAL_API_KEY:
-            errors.append("MISTRAL_API_KEY est requis")
+        if not cls.OPENAI_API_KEY:
+            errors.append("OPENAI_API_KEY est requis")
         
         if cls.DEFAULT_TEMPERATURE < 0 or cls.DEFAULT_TEMPERATURE > 1:
             errors.append("DEFAULT_TEMPERATURE doit être entre 0 et 1")
@@ -120,7 +121,7 @@ class Config:
         print(f"Taille de batch: {cls.BATCH_SIZE}")
         print(f"Niveau de log: {cls.LOG_LEVEL}")
         print(f"Mode debug: {cls.DEBUG_MODE}")
-        print(f"API Mistral configurée: {'✅' if cls.MISTRAL_API_KEY else '❌'}")
+        print(f"API OpenAI configurée: {'✅' if cls.OPENAI_API_KEY else '❌'}")
         print("=" * 50)
     
     @classmethod

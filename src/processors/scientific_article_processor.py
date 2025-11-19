@@ -9,18 +9,18 @@ from langchain_core.documents import Document
 from langchain_core.prompts import PromptTemplate
 from langchain_core.output_parsers import PydanticOutputParser
 from langchain_core.language_models.base import BaseLanguageModel
-from langchain_mistralai import ChatMistralAI
+from langchain_openai import ChatOpenAI
 import logging
 
-from ..models.scientific_article import ScientificArticle
+from ..models.pedagogical_scenario import PedagogicalScenario, PedagogicalDay, PedagogicalSequence
 from ..config import config
 from ..config import config
 
 
-class ScientificArticleProcessor:
+class PedagogicalScenarioProcessor:
     """
-    Processeur pour extraire des informations structurées d'articles scientifiques
-    à partir de résumés en markdown.
+    Processeur pour extraire des informations structurées de scénarios pédagogiques
+    à partir de documents de formation en markdown.
     """
     
     def __init__(self, 
@@ -28,29 +28,30 @@ class ScientificArticleProcessor:
                  temperature: Optional[float] = None,
                  model_name: Optional[str] = None):
         """
-        Initialise le processeur.
+        Initialise le processeur de scénarios pédagogiques.
         
         Args:
-            llm: Modèle de langage à utiliser (si None, utilise ChatMistralAI par défaut)
+            llm: Modèle de langage à utiliser (si None, utilise ChatOpenAI par défaut)
             temperature: Température pour le modèle (utilise config par défaut si None)
             model_name: Nom du modèle à utiliser (utilise config par défaut si None)
         """
         if llm is None:
-            # Configuration avec Mistral en utilisant les variables d'environnement
+            # Configuration avec OpenAI en utilisant les variables d'environnement
             model_config = config.get_model_config()
             
-            self.llm = ChatMistralAI(
+            self.llm = ChatOpenAI(
                 model=model_name or model_config["model"],
                 temperature=temperature or model_config["temperature"],
                 max_tokens=model_config["max_tokens"],
                 timeout=model_config["timeout"],
-                mistral_api_key=config.MISTRAL_API_KEY
+                openai_api_key=config.OPENAI_API_KEY,
+                openai_api_base=config.OPENAI_API_BASE
             )
         else:
             self.llm = llm
             
         # Parser pour convertir la sortie en objet Pydantic
-        self.output_parser = PydanticOutputParser(pydantic_object=ScientificArticle)
+        self.output_parser = PydanticOutputParser(pydantic_object=PedagogicalScenario)
         
         # Template de prompt pour l'extraction
         self.prompt_template = self._create_prompt_template()
@@ -66,31 +67,54 @@ class ScientificArticleProcessor:
             Template de prompt LangChain
         """
         template = """
-Vous êtes un expert en analyse d'articles scientifiques. 
-Votre tâche est d'extraire des informations structurées à partir du résumé d'un article scientifique fourni en format markdown.
+Vous êtes un expert en ingénierie pédagogique et en analyse de documents de formation. 
+Votre tâche est d'extraire des informations structurées pour créer un scénario pédagogique multi-jours à partir du document fourni en format markdown.
 
-Analysez attentivement le texte suivant et extrayez les informations demandées. 
-Si une information n'est pas disponible ou ne peut pas être déterminée avec certitude, laissez le champ vide ou utilisez une valeur par défaut appropriée.
+Analysez attentivement le texte suivant et structurez-le selon une organisation hiérarchique : SCÉNARIO > JOURS > SÉQUENCES.
+Si une information n'est pas disponible, utilisez des valeurs cohérentes par défaut.
 
 TEXTE À ANALYSER:
 {text}
 
-INSTRUCTIONS:
-- Identifiez le titre de l'article
-- Extrayez la liste des auteurs (s'ils sont mentionnés)
-- Récupérez le résumé/abstract complet
-- Identifiez les mots-clés pertinents
-- Déterminez la date de publication si mentionnée
-- Identifiez le journal/revue de publication si mentionné
-- Trouvez le DOI si présent
-- Déterminez le domaine de recherche principal
-- Identifiez la méthodologie utilisée
-- Extrayez les principales découvertes/résultats
-- Évaluez votre confiance dans l'extraction (0.0 à 1.0)
+INSTRUCTIONS DÉTAILLÉES :
+
+**NIVEAU SCÉNARIO (global)** :
+- **scenario_title** : Titre général du scénario de formation
+- **target_audience** : Public cible (niveau, profil des apprenants)
+- **global_objectives** : Objectifs pédagogiques globaux du scénario complet
+- **prerequisites** : Prérequis nécessaires
+- **global_resources** : Ressources générales nécessaires
+- **confidence_score** : Votre niveau de confiance (0.0 à 1.0)
+
+**NIVEAU JOURS** :
+Pour chaque jour identifié dans le document :
+- **day_number** : Numéro du jour (1, 2, 3, etc.)
+- **day_date** : Date si mentionnée (format libre)
+- **day_title** : Titre/thème du jour
+- **daily_objectives** : Objectifs spécifiques de la journée
+- **sequences** : Liste des séquences de ce jour
+
+**NIVEAU SÉQUENCES** :
+Pour chaque séquence pédagogique :
+- **sequence_number** : N° de séquence dans la journée (1, 2, 3, etc.)
+- **start_time** : Heure de début (format "HH:MM")
+- **end_time** : Heure de fin (format "HH:MM")
+- **content** : Contenu détaillé de la séquence
+- **pedagogical_methods** : Méthodes pédagogiques ["Cours magistral", "TP", "Travail de groupe"...]
+- **evaluation_modalities** : Modalités d'évaluation ["QCM", "Présentation orale", "Rapport"...]
+- **title** : Titre de la séquence (optionnel)
+- **objectives** : Objectifs spécifiques de la séquence
+- **resources_needed** : Ressources nécessaires pour cette séquence
+
+**LOGIQUE D'ORGANISATION** :
+- Si le document ne mentionne qu'une journée, créez 1 jour avec toutes les séquences
+- Si plusieurs jours sont mentionnés, organisez les séquences par jour
+- Si aucun horaire n'est mentionné, estimez des créneaux cohérents (ex: 09:00-12:00, 14:00-17:00)
+- Numérotez les séquences par jour (recommencer à 1 pour chaque jour)
 
 {format_instructions}
 
-RÉPONSE:
+RÉPONSE STRUCTURÉE :
 """
         
         return PromptTemplate(
@@ -101,7 +125,7 @@ RÉPONSE:
             }
         )
     
-    def process_document(self, document: Document) -> ScientificArticle:
+    def process_document(self, document: Document) -> PedagogicalScenario:
         """
         Traite un document et extrait les informations structurées.
         
@@ -109,7 +133,7 @@ RÉPONSE:
             document: Document LangChain contenant le texte markdown
             
         Returns:
-            Objet ScientificArticle avec les informations extraites
+            Objet PedagogicalScenario avec les informations extraites
             
         Raises:
             Exception: Si le traitement échoue
@@ -151,7 +175,7 @@ RÉPONSE:
                 traceback.print_exc()
             raise Exception(f"Erreur lors du traitement du document: {str(e)}")
     
-    def process_documents(self, documents: List[Document]) -> List[ScientificArticle]:
+    def process_documents(self, documents: List[Document]) -> List[PedagogicalScenario]:
         """
         Traite une liste de documents.
         
@@ -159,7 +183,7 @@ RÉPONSE:
             documents: Liste de documents LangChain
             
         Returns:
-            Liste d'objets ScientificArticle
+            Liste d'objets PedagogicalScenario
         """
         results = []
         failed_documents = []
@@ -182,16 +206,16 @@ RÉPONSE:
         return results
     
     def batch_process_with_retry(self, documents: List[Document], 
-                                max_retries: Optional[int] = None) -> List[ScientificArticle]:
+                                max_retries: Optional[int] = None) -> List[PedagogicalScenario]:
         """
         Traite les documents par batch avec mécanisme de retry.
         
         Args:
             documents: Liste de documents à traiter
-            max_retries: Nombre maximum de tentatives par document (utilise config si None)
+            max_retries: Nombre maximum de tentatives par document
             
         Returns:
-            Liste d'objets ScientificArticle
+            Liste d'objets PedagogicalScenario
         """
         max_retries = max_retries or config.MAX_RETRIES
         results = []
@@ -235,42 +259,85 @@ RÉPONSE:
         # Recréer la chaîne
         self.chain = self.prompt_template | self.llm | self.output_parser
     
-    def get_processing_stats(self, articles: List[ScientificArticle]) -> Dict[str, Any]:
+    def get_processing_stats(self, scenarios: List[PedagogicalScenario]) -> Dict[str, Any]:
         """
-        Génère des statistiques sur les articles traités.
+        Génère des statistiques sur les scénarios traités.
         
         Args:
-            articles: Liste d'articles traités
+            scenarios: Liste de scénarios traités
             
         Returns:
             Dictionnaire avec les statistiques
         """
-        if not articles:
-            return {"total_articles": 0}
+        if not scenarios:
+            return {"total_scenarios": 0}
         
-        # Calculs des statistiques
-        total_articles = len(articles)
-        articles_with_authors = len([a for a in articles if a.authors])
-        articles_with_doi = len([a for a in articles if a.doi])
-        articles_with_date = len([a for a in articles if a.publication_date])
+        # Calculs des statistiques de base
+        total_scenarios = len(scenarios)
+        total_days = sum(scenario.get_total_days() for scenario in scenarios)
+        total_sequences = sum(scenario.get_total_sequences() for scenario in scenarios)
+        total_duration_minutes = sum(scenario.get_total_duration() for scenario in scenarios)
         
-        confidence_scores = [a.confidence_score for a in articles if a.confidence_score is not None]
+        # Statistiques sur les contenus
+        scenarios_with_global_objectives = len([s for s in scenarios if s.global_objectives])
+        scenarios_with_target_audience = len([s for s in scenarios if s.target_audience])
+        scenarios_with_title = len([s for s in scenarios if s.scenario_title])
+        
+        # Scores de confiance
+        confidence_scores = [s.confidence_score for s in scenarios if s.confidence_score is not None]
         avg_confidence = sum(confidence_scores) / len(confidence_scores) if confidence_scores else 0
         
-        research_fields = [a.research_field for a in articles if a.research_field]
-        unique_fields = len(set(research_fields))
+        # Statistiques au niveau des jours
+        total_day_objectives = 0
+        days_with_objectives = 0
+        for scenario in scenarios:
+            for day in scenario.days:
+                if day.daily_objectives:
+                    days_with_objectives += 1
+                    total_day_objectives += len(day.daily_objectives)
+        
+        # Statistiques au niveau des séquences
+        sequences_with_methods = 0
+        sequences_with_evaluation = 0
+        sequences_with_objectives = 0
+        total_methods = 0
+        total_evaluations = 0
+        
+        for scenario in scenarios:
+            for day in scenario.days:
+                for sequence in day.sequences:
+                    if sequence.pedagogical_methods:
+                        sequences_with_methods += 1
+                        total_methods += len(sequence.pedagogical_methods)
+                    if sequence.evaluation_modalities:
+                        sequences_with_evaluation += 1
+                        total_evaluations += len(sequence.evaluation_modalities)
+                    if sequence.objectives:
+                        sequences_with_objectives += 1
         
         stats = {
-            "total_articles": total_articles,
-            "articles_with_authors": articles_with_authors,
-            "articles_with_doi": articles_with_doi,
-            "articles_with_publication_date": articles_with_date,
+            "total_scenarios": total_scenarios,
+            "total_days": total_days,
+            "total_sequences": total_sequences,
+            "total_duration_minutes": total_duration_minutes,
+            "total_duration_hours": round(total_duration_minutes / 60, 2),
+            "average_days_per_scenario": round(total_days / total_scenarios, 1),
+            "average_sequences_per_scenario": round(total_sequences / total_scenarios, 1),
+            "average_duration_per_scenario": round(total_duration_minutes / total_scenarios, 1),
             "average_confidence_score": round(avg_confidence, 3),
-            "unique_research_fields": unique_fields,
-            "completion_rates": {
-                "authors": round(articles_with_authors / total_articles * 100, 1),
-                "doi": round(articles_with_doi / total_articles * 100, 1),
-                "publication_date": round(articles_with_date / total_articles * 100, 1)
+            "content_completion_rates": {
+                "scenarios_with_title": round(scenarios_with_title / total_scenarios * 100, 1),
+                "scenarios_with_target_audience": round(scenarios_with_target_audience / total_scenarios * 100, 1),
+                "scenarios_with_global_objectives": round(scenarios_with_global_objectives / total_scenarios * 100, 1),
+                "days_with_objectives": round(days_with_objectives / total_days * 100, 1) if total_days > 0 else 0,
+                "sequences_with_methods": round(sequences_with_methods / total_sequences * 100, 1) if total_sequences > 0 else 0,
+                "sequences_with_evaluation": round(sequences_with_evaluation / total_sequences * 100, 1) if total_sequences > 0 else 0,
+                "sequences_with_objectives": round(sequences_with_objectives / total_sequences * 100, 1) if total_sequences > 0 else 0
+            },
+            "averages": {
+                "methods_per_sequence": round(total_methods / sequences_with_methods, 1) if sequences_with_methods > 0 else 0,
+                "evaluations_per_sequence": round(total_evaluations / sequences_with_evaluation, 1) if sequences_with_evaluation > 0 else 0,
+                "objectives_per_day": round(total_day_objectives / days_with_objectives, 1) if days_with_objectives > 0 else 0
             }
         }
         
