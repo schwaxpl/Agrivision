@@ -1,5 +1,5 @@
 # Dockerfile pour Agrivision API - Compatible Hugging Face Spaces
-FROM python:3.11-slim
+FROM python:3.14-slim
 
 # Définir le répertoire de travail
 WORKDIR /app
