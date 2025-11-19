@@ -1,0 +1,61 @@
+# Fichiers et dossiers à ignorer lors de la construction Docker
+
+# Environnements virtuels Python
+.venv/
+venv/
+env/
+.env/
+
+# Fichiers de cache Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+.pytest_cache/
+
+# Fichiers temporaires et logs
+*.log
+logs/*.log
+.tmp/
+temp/
+
+# Fichiers de configuration locaux
+.env
+.env.local
+.env.*.local
+
+# Fichiers IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Fichiers système
+.DS_Store
+Thumbs.db
+
+# Git
+.git/
+.gitignore
+
+# Documentation
+*.md
+docs/
+
+# Fichiers de test
+test_*.py
+*_test.py
+tests/
+
+# Fichiers de sortie volumineux (gardés localement mais pas dans l'image)
+output/*.json
+output/*.md
+output/task_*/
+
+# Fichiers d'exemple non essentiels
+examples/
+
+# Fichiers Windows
+desktop.ini

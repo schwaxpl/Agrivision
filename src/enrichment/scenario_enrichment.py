@@ -226,8 +226,7 @@ Si aucune conclusion claire, répondez: "AUCUNE CONCLUSION"
                 "objectives": ", ".join(sequence.objectives) if sequence.objectives else "Non spécifiés",
                 "content": sequence.content,
                 "methods": ", ".join(sequence.pedagogical_methods),
-                "activities": ", ".join(getattr(sequence, 'activities', [])),
-                "materials": ", ".join(getattr(sequence, 'materials', []))
+                "resources": ", ".join(sequence.resources_needed)
             }
             
             prompt = f"""
