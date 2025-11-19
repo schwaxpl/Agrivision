@@ -28,13 +28,13 @@ RUN useradd -m -u 1000 appuser && chown -R appuser:appuser /app
 USER appuser
 
 # Exposer le port 7860 (requis pour Hugging Face Spaces)
-EXPOSE 7860
+ENV PORT=10000
+EXPOSE 10000
 
 # Variables d'environnement
 ENV PYTHONPATH=/app
 ENV PYTHONUNBUFFERED=1
 ENV HOST=0.0.0.0
-ENV PORT=7860
 
 # Commande pour démarrer l'application
-CMD ["python", "start_hf_spaces.py"]
+CMD ["python", "start_api.py"]
