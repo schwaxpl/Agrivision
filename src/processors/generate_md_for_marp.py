@@ -1,15 +1,16 @@
 import os
 from pathlib import Path
-from langchain_mistralai import ChatMistralAI
+from langchain_openai import ChatOpenAI
 from langchain_core.prompts import PromptTemplate
-from dotenv import load_dotenv
+from ..config import config
 
-# Charger la clé API Mistral depuis .env
-load_dotenv()
-MISTRAL_API_KEY = os.getenv("MISTRAL_API_KEY")
-
-# Initialiser le modèle Mistral
-llm = ChatMistralAI(api_key=MISTRAL_API_KEY)
+# Initialiser le modèle OpenAI avec la configuration centralisée
+llm = ChatOpenAI(
+    api_key=config.OPENAI_API_KEY,
+    model=config.DEFAULT_MODEL,
+    temperature=config.DEFAULT_TEMPERATURE,
+    max_tokens=config.MAX_TOKENS
+)
 
 # Prompt pour générer des slides Marp
 MARPPROMPT = """
@@ -23,7 +24,8 @@ Contenu Markdown :
 
 def generate_marp_slides_from_md(md_content: str) -> str:
     """
-    Utilise Mistral pour générer des slides Marp à partir d'un contenu Markdown.
+    Utilise OpenAI pour générer des slides Marp à partir d'un contenu Markdown.
+    Utilise la configuration centralisée pour l'API et les paramètres du modèle.
     """
     prompt = PromptTemplate.from_template(MARPPROMPT)
     chain = prompt | llm
@@ -72,7 +74,7 @@ def process_examples_folder(examples_folder: str, output_folder: str):
         print(f"Slides Marp générées : {out_file}")
 
 if __name__ == "__main__":
-    # Dossier d'exemples et dossier de sortie
+    # Utiliser les répertoires de configuration centralisée
     examples_folder = os.path.join(os.path.dirname(__file__), "../../examples")
-    output_folder = os.path.join(os.path.dirname(__file__), "../../output")
+    output_folder = config.OUTPUT_DIR
     process_examples_folder(examples_folder, output_folder)

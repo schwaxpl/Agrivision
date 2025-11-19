@@ -30,6 +30,14 @@ class Config:
     OPENAI_ORGANIZATION: Optional[str] = os.getenv("OPENAI_ORGANIZATION")
     
     # ==========================================================================
+    # AIRTABLE CONFIGURATION
+    # ==========================================================================
+    AIRTABLE_API_KEY: str = os.getenv("AIRTABLE_API_KEY", "")
+    AIRTABLE_BASE_ID: str = os.getenv("AIRTABLE_BASE_ID", "")
+    AIRTABLE_TABLE_NAME: str = os.getenv("AIRTABLE_TABLE_NAME", "Article")
+
+    
+    # ==========================================================================
     # MODÈLE CONFIGURATION
     # ==========================================================================
     DEFAULT_MODEL: str = os.getenv("DEFAULT_MODEL", "gpt-3.5-turbo")
